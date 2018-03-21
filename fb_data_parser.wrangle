@@ -1,0 +1,18 @@
+extract col: column_0 after: `<span class=""user"">` before: `</span>`
+rename col: column_0 to: 'column3'
+extract col: column3 on: `{alpha}+` after: `class=""meta"">` before: `, `
+extract col: column3 after: `ass=""meta"">{alpha}+,` before: ` at`
+extract col: column3 after: `at ` before: `</span>`
+extract col: column3 after: `</div></div>` before: `</p>`
+replace col: column6 with: '' on: `<p>` global: true
+delete row: ismissing([column6])
+drop col: column3
+rename col: column6 to: 'text'
+rename col: column5 to: 'time'
+rename col: column4 to: 'date'
+rename col: column1 to: 'day'
+rename col: column_1 to: 'user'
+drop col: column2
+move col: text after: user
+move col: date before: time
+delete row: ismissing([user])
