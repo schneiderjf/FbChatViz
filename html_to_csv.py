@@ -34,7 +34,7 @@ fb_database['plattform'] = 'Facebook'
 # iterate through the messages
 no_files = len(os.listdir('messages/')) - 8 
 for i in range(no_files):
-    with open('messages/'+str(i)+'.html', 'r', encoding="utf-8") as f:
+    with open('messages/'+str(i)+'.html', 'r',encoding="utf-8") as f:
         data=f.read().replace('\n', '')
     x = re.search('<title>(.*)</title>', data, re.S)
     name = x.group(1)
