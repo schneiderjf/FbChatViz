@@ -1,6 +1,6 @@
 # Tutorial: Getting started analyzing your Facebook chats - Step by Step 
 
-Facebook knows a lot about us. In fact, all messages we have ever sent via messenger are sitting on the servers of the internet giant - as long as we have not deleted them. Every Facebook user can download this data and this tutorial should provide you with a step-by-step the tools bring the data into an analyzable format and help you creating some basic features. 
+Facebook knows a lot about us. In fact, all messages we have ever sent via messenger are sitting on the servers of the internet giant - as long as you have not deleted them. Every Facebook user can download their data and this tutorial should provide you with a step-by-step tutorial, to bring your data into an analyzable format, as well as helping you to create some first basic features for chat analysis. 
 
 ## 0, Install requirements
 
