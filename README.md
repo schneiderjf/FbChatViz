@@ -69,6 +69,8 @@ The new csv file "fb_data_features.csv" will be added to the folder
 
 ## 4, Some basic questions 
 
+When opening the file, you might need to specify the lineterminator to be '\n'. (E.g. pd.read_csv(fname, lineterminator='\n')). If you don't specify it, this might cause troubles... 
+
 You can now use these features to answer some basic questions, by loading the data into your favored analytics environment. Here are some suggestions of analysis you may want to do: 
 - Who are the people you have chatted the most with? 
 - How did the people change over time you chatted with? 
