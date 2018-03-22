@@ -38,7 +38,7 @@ It will take a few seconds and create the csv file as “fb_data.csv”. Now you
 ## 3, Generate basic features 
 
 With this data one can already do some basic analysis, such as frequency per time, frequencies per friends, etc. 
-However for more interesting analysis, it makes sense to generate some features for more in depth analysis of your relationships and their development over time. To generate a few more features, just run the second cell in the jupyter notebook. (Make sure the wrangeled data set is present, and it has the right filename). The following features will be added: 
+However for more interesting analysis, it makes sense to generate some features for more in depth analysis of your relationships and their development over time. To generate a few more features, just run the second script. (Make sure the data set is present, and it has the right filename 'fb_data.csv'). The following features will be added: 
 
 * word_count: number of words in a message
 * question_asked: indicates, whether a question was asked
@@ -50,6 +50,7 @@ However for more interesting analysis, it makes sense to generate some features 
 * response_time: how much time (Work in progress, will be available soon)
 * new_conversation: binary, 1 if the last conversation is more than 24 hours ago (Work in progress, will be available soon)
 * sentiment: by using the NLTK library (Work in progress, will be available soon)
+* topic: what topics does the message contain (Work in progress, will be available soon)
 
 To create these features just run: 
 
@@ -57,7 +58,7 @@ To create these features just run:
 python generate_features.py
 ```
 
-The new csv file "fb_data_features.csv" will be in the folder
+The new csv file "fb_data_features.csv" will be added to the folder
 
 ## 4, Some basic questions 
 
