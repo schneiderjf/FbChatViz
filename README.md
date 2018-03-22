@@ -2,7 +2,14 @@
 
 Facebook knows a lot about us. In fact, all messages we have ever sent via messenger are sitting on the servers of the internet giant - as long as we have not deleted them. Every Facebook user can download this data and this tutorial should provide you with a step-by-step the tools bring the data into an analyzable format and help you creating some basic features. 
 
-## 1, Download your Data
+## 0, Install requirements
+
+Please make sure you have the following requirements installed: 
+* Python 3.x
+* numpy 
+* pandas
+
+## 1, Download your data
 
 To get your facebook data just follow the instructions of this link: https://www.facebook.com/help/302796099745838
 
