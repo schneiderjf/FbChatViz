@@ -75,7 +75,7 @@ def get_day(x):
     return y
 
 def get_time(x):
-    matchobj = re.search(r'at(.*?)</span>',x)
+    matchobj = re.search(r' at (.*?)</span>',x)
     if matchobj:
         y = matchobj.group(1)
     else: 
