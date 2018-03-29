@@ -3,18 +3,19 @@ import pandas as pd
 import re
 import os, os.path
 from datetime import datetime, timedelta
+
+
 import nltk
 from nltk.classify.textcat import TextCat
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud, STOPWORDS
 nltk.download('crubadan')
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('stopwords')
+nltk.download('vader_lexicon')
 
 
 print('The features are created...') 
@@ -212,9 +213,10 @@ facebook['timestamp'] = facebook[['date','time']].apply(lambda t: timestamp(*t),
 facebook = response_time(facebook)
 facebook['conversation_init'] = facebook['response_time'].apply(lambda t: conversation_init(t))
 facebook['emoji_count'] = facebook.text.apply(lambda m: emoji_count(m))
+
 # The NLTK Vader libaray needs to be present
 #facebook['msg_sentiment'] = facebook.text.apply(lambda m: sentiment_analysis(m))
-
+#facebook['language'] = facebook.text.apply(lambda m: detect_language(m))
 
 
 #### export data ####
