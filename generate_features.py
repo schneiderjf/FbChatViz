@@ -87,13 +87,11 @@ def conversation_init(response_time):
         return 1
     else: 
         return 0
+        
+def emoji_count(m):
+    return len(re.findall(r'[\U0001f600-\U0001f650]', s))
+
 """
-def reply_time(x)
-    pass
-
-def conversation_initiated(x)
-    pass
-
 def sentiment(x):
     pass
 
@@ -127,6 +125,7 @@ facebook['sticket_sent'] = facebook.text.apply(lambda m: sticker_sent(m))
 facebook['timestamp'] = facebook[['date','time']].apply(lambda t: timestamp(*t), axis=1)
 facebook = response_time(facebook)
 facebook['conversation_init'] = facebook['response_time'].apply(lambda t: conversation_init(t))
+facebook['emoji_count'] = facebook.text.apply(lambda m: emoji_count(m))
 
 """
 facebook['group_conversation'] = None
