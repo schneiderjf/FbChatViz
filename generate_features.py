@@ -3,7 +3,7 @@ import pandas as pd
 import re
 import os, os.path
 from datetime import datetime, timedelta
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
+#from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 print('The features are created...') 
 print('This may take a few seconds.') 
@@ -91,7 +91,12 @@ def conversation_init(response_time):
         return 0
 
 def emoji_count(m):
-    return len(re.findall(r'[\U0001f600-\U0001f650]', m))
+    m = str(m)
+    if re.findall(r'[\U0001f600-\U0001f650]', m):
+        return len(re.findall(r'[\U0001f600-\U0001f650]', m))
+    else: 
+        return 0
+
 
 def sentiment_analysis(m):
     '''
