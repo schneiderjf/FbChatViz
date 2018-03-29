@@ -3,7 +3,19 @@ import pandas as pd
 import re
 import os, os.path
 from datetime import datetime, timedelta
-#from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import nltk
+from nltk.classify.textcat import TextCat
+from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.decomposition import LatentDirichletAllocation
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud, STOPWORDS
+nltk.download('crubadan')
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('stopwords')
+
 
 print('The features are created...') 
 print('This may take a few seconds.') 
@@ -105,6 +117,68 @@ def sentiment_analysis(m):
     m = str(m)
     sid = SentimentIntensityAnalyzer()
     return sid.polarity_scores(m)['compound']
+
+
+def detect_language(x):
+    tc = TextCat()
+    lemm = WordNetLemmatizer()
+
+    tok = nltk.word_tokenize(x)
+    lemmatized = [lemm.lemmatize(word) for word in tok]
+    sentence = [sent for sent in lemmatized if sent.isalpha()]
+
+    text = ' '.join(sentence[:10])
+
+    lang = tc.guess_language(text)
+    
+    return lang
+
+
+def top_word_freq(wordlist, n):
+    
+    wordfreq = [wordlist.count(p) for p in wordlist]
+    freqdict = dict(zip(wordlist, wordfreq))
+    
+    aux = [(freqdict[key], key) for key in freqdict]
+    aux.sort()
+    aux.reverse()
+    
+    return aux[:n]
+
+
+def topics_analysis(x, n_top_words):
+    
+    text, n_top_words = list(x), n_top_words
+    lemm = WordNetLemmatizer()
+    class LemmaCountVectorizer(CountVectorizer):
+    
+        def build_analyzer(self):
+        
+            analyzer = super(LemmaCountVectorizer, self).build_analyzer()
+            return lambda doc: (lemm.lemmatize(w) for w in analyzer(doc))
+    
+    tf_vectorizer = LemmaCountVectorizer(max_df = 0.95, min_df = 2, stop_words = 'english', decode_error = 'ignore')
+
+    tf = tf_vectorizer.fit_transform(text)
+    
+    lda = LatentDirichletAllocation(n_components = 11, max_iter = 5,
+                                    learning_method = 'online', learning_offset = 50., random_state = 0)
+    lda.fit(tf)
+    
+    tf_feature_names = tf_vectorizer.get_feature_names()
+    
+    first_topic = lda.components_[0]
+    second_topic = lda.components_[1]
+    third_topic = lda.components_[2]
+    fourth_topic = lda.components_[3]
+    
+    first_topic_words = [tf_feature_names[i] for i in first_topic.argsort()[:-n_top_words - 1 :-1]]
+    second_topic_words = [tf_feature_names[i] for i in second_topic.argsort()[:-n_top_words - 1 :-1]]
+    third_topic_words = [tf_feature_names[i] for i in third_topic.argsort()[:-n_top_words - 1 :-1]]
+    fourth_topic_words = [tf_feature_names[i] for i in fourth_topic.argsort()[:-n_top_words - 1 :-1]]
+    
+    return first_topic_words
+
 
 """
 def sentiment(x):
