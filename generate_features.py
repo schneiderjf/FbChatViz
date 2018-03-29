@@ -142,14 +142,6 @@ facebook['emoji_count'] = facebook.text.apply(lambda m: emoji_count(m))
 #facebook['msg_sentiment'] = facebook.text.apply(lambda m: sentiment_analysis(m))
 
 
-"""
-facebook['group_conversation'] = None
-facebook['reply_time'] = facebook.text.apply(lambda m: question_flag(m)) 
-facebook['conversation_initiated'] = facebook.text.apply(lambda m: question_flag(m))
-facebook['sentiment'] = facebook.text.apply(lambda m: question_flag(m))
-facebook['no_emojis'] = facebook.text.apply(lambda m: question_flag(m))
-facebook['topic'] = facebook.text.apply(lambda m: question_flag(m))
-""" 
 
 #### export data ####
 
