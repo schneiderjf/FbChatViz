@@ -46,8 +46,34 @@ def photo_sent(x):
         return 1
     else:
         return 0
+
+def timestamp(x,y):
+    s = x +" "+ y 
+    t = datetime.strptime(s, '%d %B %Y %H:%M %Z')
+    return t
+
+
+def response_time(fb):
+    #sort by ID 
+    fb = fb.sort_values('conversation_id')
     
-"""def reply_time(x)
+    #for every entry: check previous entry of id; if id is different, enter 9999
+    array = fb[['conversation_id','timestamp']].as_matrix()
+    # replytime in dd:hh:mm
+    conversation_id = None
+    results = []
+    for i in range(len(array)): 
+        if array[i,0] == conversation_id: 
+            #calculate time difference
+            response_time = array[i-1,1] - array[i,1]
+            results.append(response_time)
+        else: 
+            conversation_id = array[i,0]
+            results.append('New')
+    fb['response_time'] = results
+    return fb
+"""
+def reply_time(x)
     pass
 
 def conversation_initiated(x)
@@ -59,14 +85,18 @@ def sentiment(x):
 def no_emojis(x):
     pass
 
-def topic(x):
-    pass
-    
-def image(x): 
+def topic_by_day(x):
     pass
 
-def group_conversation(x):
+def topic_by_month(x):
     pass
+
+def topic(x):
+    pass
+
+def language(x):
+    pass
+
 """
 
 #### load the data ####
@@ -79,6 +109,8 @@ facebook['question_flag'] = facebook.text.apply(lambda m: question_flag(m))
 facebook = group_conversation(facebook)
 facebook['photo_sent'] = facebook.text.apply(lambda m: photo_sent(m))
 facebook['sticket_sent'] = facebook.text.apply(lambda m: sticker_sent(m))
+facebook['timestamp'] = facebook[['date','time']].apply(lambda t: timestamp(*t), axis=1)
+facebook = response_time(facebook)
 
 """
 facebook['group_conversation'] = None
