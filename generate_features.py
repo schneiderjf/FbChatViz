@@ -3,6 +3,7 @@ import pandas as pd
 import re
 import os, os.path
 from datetime import datetime, timedelta
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 print('The features are created...') 
 print('This may take a few seconds.') 
@@ -87,15 +88,20 @@ def conversation_init(response_time):
         return 1
     else: 
         return 0
-        
+
 def emoji_count(m):
     return len(re.findall(r'[\U0001f600-\U0001f650]', s))
 
+def sentiment_analysis(m):
+    '''
+    returns the sentiment score between -1 and 1 
+    '''
+    m = str(m)
+    sid = SentimentIntensityAnalyzer()
+    return sid.polarity_scores(m)['compound']
+
 """
 def sentiment(x):
-    pass
-
-def no_emojis(x):
     pass
 
 def topic_by_day(x):
@@ -126,6 +132,9 @@ facebook['timestamp'] = facebook[['date','time']].apply(lambda t: timestamp(*t),
 facebook = response_time(facebook)
 facebook['conversation_init'] = facebook['response_time'].apply(lambda t: conversation_init(t))
 facebook['emoji_count'] = facebook.text.apply(lambda m: emoji_count(m))
+# The NLTK Vader libaray needs to be present
+#facebook['msg_sentiment'] = facebook.text.apply(lambda m: sentiment_analysis(m))
+
 
 """
 facebook['group_conversation'] = None
