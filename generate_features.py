@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import re
 import os, os.path
+from datetime import datetime, timedelta
 
 print('The features are created...') 
 print('This may take a few seconds.') 
@@ -72,6 +73,20 @@ def response_time(fb):
             results.append('New')
     fb['response_time'] = results
     return fb
+
+def conversation_init(response_time):
+    """
+    if message starts with a greeting or last message longer than a day 
+    """
+    #m = re.match(r'(Hey|Hello|Hi|Hallo|Hay|Ola|Hola)',message)
+    #if m: 
+    #    return 1
+    if response_time == 'New':
+        return 1
+    elif response_time > timedelta(days=1):
+        return 1
+    else: 
+        return 0
 """
 def reply_time(x)
     pass
@@ -111,6 +126,7 @@ facebook['photo_sent'] = facebook.text.apply(lambda m: photo_sent(m))
 facebook['sticket_sent'] = facebook.text.apply(lambda m: sticker_sent(m))
 facebook['timestamp'] = facebook[['date','time']].apply(lambda t: timestamp(*t), axis=1)
 facebook = response_time(facebook)
+facebook['conversation_init'] = facebook['response_time'].apply(lambda t: conversation_init(t))
 
 """
 facebook['group_conversation'] = None
