@@ -9,6 +9,10 @@ Please make sure you have the following requirements installed:
 * numpy 
 * pandas
 
+(Make sure that python version 3 is installed, as there will be an encoding error otherwise)
+
+
+
 ## 1, Download your data
 
 To get your facebook data just follow the instructions of this link: https://www.facebook.com/help/302796099745838
@@ -20,6 +24,7 @@ In a nutshell:
 
 Facebook needs to collect your data, so it might take a while. Once the folder with the data is present continue to step 2. 
 
+Ideally you are using a mac, as with windows some complications can occur. 
 
 ## 2, Parse the HTML files into a csv file
 
@@ -42,6 +47,7 @@ The script will take a few seconds and it will create the csv file as “fb_data
 * plattform
 * text
 
+(If you use python 2, you have to delete the encoding parameter)
 ## 3, Generate basic features 
 
 With this data one can already do some basic analysis, such as frequency per time, frequencies per friends, etc. 
@@ -58,10 +64,10 @@ A new csv file "fb_data_features.csv" will be added to the folder, with the foll
 * group_conversation: flags if more than 2 people are in the conversation
 * image_sent: flag if a message was an image
 * sticker_sent: flag if a message was a sticker
+* response_time: how much time 
+* conversation_init: binary, 1 if the last conversation is more than 24 hours ago 
 
 ###### Futures Features (Work in Progress)
-* response_time: how much time (Work in progress, will be available soon)
-* new_conversation: binary, 1 if the last conversation is more than 24 hours ago (Work in progress, will be available soon)
 * sentiment: by using the NLTK library (Work in progress, will be available soon)
 * topic: what topics does the message contain (Work in progress, will be available soon)
 
