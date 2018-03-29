@@ -57,7 +57,7 @@ def timestamp(x,y):
 
 def response_time(fb):
     #sort by ID 
-    fb = fb.sort_values('conversation_id')
+    fb = fb.sort_values(by=['conversation_id', 'timestamp'])
     
     #for every entry: check previous entry of id; if id is different, enter 9999
     array = fb[['conversation_id','timestamp']].as_matrix()
@@ -67,13 +67,14 @@ def response_time(fb):
     for i in range(len(array)): 
         if array[i,0] == conversation_id: 
             #calculate time difference
-            response_time = array[i-1,1] - array[i,1]
+            response_time = array[i,1] - array[i-1,1]
             results.append(response_time)
         else: 
             conversation_id = array[i,0]
             results.append('New')
     fb['response_time'] = results
     return fb
+
 
 def conversation_init(response_time):
     """
@@ -90,7 +91,7 @@ def conversation_init(response_time):
         return 0
 
 def emoji_count(m):
-    return len(re.findall(r'[\U0001f600-\U0001f650]', s))
+    return len(re.findall(r'[\U0001f600-\U0001f650]', m))
 
 def sentiment_analysis(m):
     '''
