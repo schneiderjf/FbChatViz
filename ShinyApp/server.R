@@ -20,7 +20,7 @@ shinyServer(function(input, output, session) {
                                               format = "%Y-%m-%d %H:%M:%S"))
   
     # select top 50 friends 
-    top_users <- facebook %>% group_by(user) %>% 
+    top_users <- facebook %>% filter(!is.na(user)& user != "" & user!= " ") %>% group_by(user) %>% 
       summarize(word_sum = sum(msg_word_count)) %>% 
       arrange(desc(word_sum))
     top_users <- head(top_users,50)
