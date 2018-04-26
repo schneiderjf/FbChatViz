@@ -82,8 +82,25 @@ shinyServer(function(input, output, session) {
       fb_me$conversation_init <- as.integer(fb_me$conversation_init)
       fb_me$question_flag <- as.numeric(fb_me$question_flag)
       fb_me$Gender <- as.numeric(fb_me$Gender)
-     
+      
+      #### define the color scales
+      
+      myColors1 <- colors()[c(463, 563, 80)]
+      names(myColors1) <- levels(fb_others$Gender)
+      colScale1 <- scale_fill_manual(name = "Gender",values = myColors1)
     
+      myColors2 <- brewer.pal(9,"Set1")
+      names(myColors2) <- levels(fb_others$Friend_Group)
+      colScale2 <- scale_fill_manual(name = "Friend_Group",values = myColors2)
+      
+      myColors3 <- brewer.pal(9,"Set1")
+      names(myColors3) <- levels(fb_others$Relationship)
+      colScale3 <- scale_fill_manual(name = "Relationship",values = myColors3)
+      
+      myColors3 <- brewer.pal(9,"Set1")
+      names(myColors3) <- levels(fb_others$Relationship)
+      colScale3 <- scale_fill_manual(name = "Relationship",values = myColors3)
+      
     #### Make the plots ####
       
     output$plot1 <- reactivePlot(function() {
@@ -94,20 +111,14 @@ shinyServer(function(input, output, session) {
       
       inputcat = as.character(input$plot1_cat)
       if (inputcat == "Gender") {
-        myColors1 <- brewer.pal(3,"Set1")
-        names(myColors1) <- levels(fb_others$Gender)
-        colScale <- scale_colour_manual(name = "Gender",values = myColors1)
+        colScale <- colScale1
       }
       if( inputcat == "Friend Group"){
-        myColors1 <- brewer.pal(9,"Set1")
-        names(myColors1) <- levels(fb_others$Friend_Group)
-        colScale <- scale_colour_manual(name = "Friend_Group",values = myColors1)
+        colScale <- colScale2
         inputcat <- "Friend_Group"
       }
       if( inputcat == "Relationship"){
-        myColors1 <- brewer.pal(9,"Set1")
-        names(myColors1) <- levels(fb_others$Relationship)
-        colScale <- scale_colour_manual(name = "Relationship",values = myColors1)
+        colScale <- colScale3
       }
       
       s = fb_others %>%  filter(year == year_filter) %>%group_by(user) %>% summarize(count = n())  %>% arrange(desc(count))
@@ -158,11 +169,11 @@ shinyServer(function(input, output, session) {
     output$plot3 <- reactivePlot(function() {
   
       p3 <- ggplot(sentiment.comparison %>% filter(conversation_name==gsub(" ", "_", input$plot3_convers)), aes(x=date2, y=msg_sentiment ,color=user)) + 
-        geom_point(alpha=.5) +
-        geom_smooth(span=0.01) +
+        geom_point(alpha=.25) +
+        geom_smooth(span=0.001) +
         ggtitle("Trend in Positivity") +
         xlab('Time')+
-        ylab('Positivity of the message')
+        ylab('Positivity of the message') 
       print(p3)
     })
   
