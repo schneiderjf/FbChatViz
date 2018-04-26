@@ -14,7 +14,7 @@ shinyServer(function(input, output, session) {
 
     filepath <- input$fb_filepath
     fb_datapath <- filepath$datapath
-    facebook <<- read.csv(fb_datapath)
+    facebook <<- read.csv(fb_datapath, encoding = 'UTF-8')
     
     facebook$timestamp <- as.POSIXct(strptime(x = as.character(facebook$timestamp),
                                               format = "%Y-%m-%d %H:%M:%S"))
@@ -46,6 +46,7 @@ shinyServer(function(input, output, session) {
                                                 format = "%Y-%m-%d %H:%M:%S"))
       # filter outlier (erroneuos data)
       facebook <- facebook[facebook$timestamp > strptime(x = as.character('2005-01-01 01:00:00'), format = "%Y-%m-%d %H:%M:%S"),]
+      facebook <- facebook %>% filter(!is.na(user)& user != "" & user!= " ") 
       
       top_users <- hot_to_r(input$table)
       facebook <- facebook %>% group_by(user) %>% left_join(top_users)
@@ -56,8 +57,6 @@ shinyServer(function(input, output, session) {
       
       #### Data Processing #### 
       facebook$msg_word_count <- as.numeric(facebook$msg_word_count)
-      facebook$conversation_init <- factor(facebook$conversation_init)
-      facebook$question_flag <- factor(facebook$question_flag)
       
       facebook$Gender <- factor(facebook$Gender)
       facebook$Friend_Group <- factor(facebook$Friend_Group)
@@ -66,7 +65,7 @@ shinyServer(function(input, output, session) {
       facebook[is.na(facebook)] <- "unclassified"
       
       sentiment.comparison <- facebook %>% filter(photo_sent==0) %>%
-        mutate(date2=as.Date(date, "%B %d, %Y"))
+        mutate(date2=as.Date(timestamp))
       
       fb_others <- facebook %>% filter(user != input$name & Friend_Group != 'drop' & group_conversation == 0 & sticket_sent == 0)
       fb_others$year = floor_date(fb_others$timestamp, "year")
@@ -78,7 +77,7 @@ shinyServer(function(input, output, session) {
       years <- sort(unique(substring(fb_others$year,1,4)))
       
       updateSelectInput(session, "plot1_year", choices = years)
-      updateSelectInput(session, "plot3_convers", choices = head(top_users$user[top_users$user != input$name & top_users$Friend_Group != 'drop'],5))
+      updateSelectInput(session, "plot3_convers", choices = head((top_users %>% filter( user != input$name & Friend_Group != 'drop'))$user,10))
       
       fb_me$conversation_init <- as.integer(fb_me$conversation_init)
       fb_me$question_flag <- as.numeric(fb_me$question_flag)
@@ -148,7 +147,7 @@ shinyServer(function(input, output, session) {
       ggplot(aes(month, eval(parse(text=input2cat)))) +
           geom_bar(stat='identity') + 
           geom_smooth()+
-          ggtitle('input2cat')+
+          ggtitle(input2cat)+
           xlab('Time')+
           ylab(input2cat_raw)
     print(p2)
