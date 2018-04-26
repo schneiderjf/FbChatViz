@@ -64,7 +64,10 @@ def photo_sent(x):
 
 def timestamp(x,y):
     s = x +" "+ y 
-    t = datetime.strptime(s, '%d %B %Y %H:%M %Z')
+    try: 
+        t = datetime.strptime(s, '%d %B %Y %H:%M %Z')
+    except: 
+        t = parse(s)
     return t
 
 
@@ -115,10 +118,15 @@ def sentiment_analysis(m):
     '''
     returns the sentiment score between -1 and 1 
     '''
-    m = str(m)
-    sid = SentimentIntensityAnalyzer()
-    return sid.polarity_scores(m)['compound']
-
+    try:
+        first_text_list = nltk.word_tokenize(m)
+        cleaned = [word for word in first_text_list if word.lower() not in stopwords]
+        cleaned = str(' '.join(cleaned))    
+        
+        sid = SentimentIntensityAnalyzer()
+        return sid.polarity_scores(cleaned)['compound']
+    except:
+        return 0
 
 def detect_language(x):
     tc = TextCat()
@@ -181,23 +189,6 @@ def topics_analysis(x, n_top_words):
     return first_topic_words
 
 
-"""
-def sentiment(x):
-    pass
-
-def topic_by_day(x):
-    pass
-
-def topic_by_month(x):
-    pass
-
-def topic(x):
-    pass
-
-def language(x):
-    pass
-
-"""
 
 #### load the data ####
 facebook = pd.read_csv('fb_data.csv', lineterminator='\n')
@@ -215,8 +206,8 @@ facebook['conversation_init'] = facebook['response_time'].apply(lambda t: conver
 facebook['emoji_count'] = facebook.text.apply(lambda m: emoji_count(m))
 
 # The NLTK Vader libaray needs to be present
-#facebook['msg_sentiment'] = facebook.text.apply(lambda m: sentiment_analysis(m))
-#facebook['language'] = facebook.text.apply(lambda m: detect_language(m))
+facebook['msg_sentiment'] = facebook.text.apply(lambda m: sentiment_analysis(m))
+facebook['language'] = facebook.text.apply(lambda m: detect_language(m))
 
 
 #### export data ####
