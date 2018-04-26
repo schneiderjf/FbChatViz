@@ -46,7 +46,6 @@ shinyServer(function(input, output, session) {
                                                 format = "%Y-%m-%d %H:%M:%S"))
       # filter outlier (erroneuos data)
       facebook <- facebook[facebook$timestamp > strptime(x = as.character('2005-01-01 01:00:00'), format = "%Y-%m-%d %H:%M:%S"),]
-      facebook$date <- as.Date(facebook$date, format = "%d %B %Y")
       
       top_users <- hot_to_r(input$table)
       facebook <- facebook %>% group_by(user) %>% left_join(top_users)
@@ -70,7 +69,7 @@ shinyServer(function(input, output, session) {
         mutate(date2=as.Date(date, "%B %d, %Y"))
       
       fb_others <- facebook %>% filter(user != input$name & Friend_Group != 'drop' & group_conversation == 0 & sticket_sent == 0)
-      fb_others$year = floor_date(fb_others$date, "year")
+      fb_others$year = floor_date(fb_others$timestamp, "year")
       
       levels(fb_others$Gender) <- c('Female','Male', 'Uncategorized')
       
@@ -132,7 +131,7 @@ shinyServer(function(input, output, session) {
   
 
     #### Make Plot 2 ####
-    plot2_df <- fb_me %>% group_by(month=floor_date(date, "month")) %>%
+    plot2_df <- fb_me %>% group_by(month=floor_date(timestamp, "month")) %>%
       summarize(word_count_avg = mean(msg_word_count),
                 questions_rate = mean(question_flag),
                 initialized_rate = mean(conversation_init),
